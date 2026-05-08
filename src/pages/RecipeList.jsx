@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import RecipeCard from '../components/RecipeCard'
 import CategoryFilter from '../components/CategoryFilter'
 import RecipeModal from '../components/RecipeModal'
 import RankingSection from '../components/RankingSection'
+import RecipeSlider from '../components/RecipeSlider'
 import styles from './RecipeList.module.css'
 
 const CATEGORIES = ['전체', '국·찌개', '메인반찬', '소반찬', '밥·면', '쌈·샐러드', '한상차림', '기타']
@@ -68,25 +68,23 @@ export default function RecipeList() {
 
       <CategoryFilter categories={CATEGORIES} active={category} onChange={setCategory} />
 
-      <main className={styles.main}>
-        {loading ? (
-          <div className={styles.state}><div className="loading-spinner" /></div>
-        ) : recipes.length === 0 ? (
-          <div className={styles.state}>
-            <p className={styles.emptyIcon}>{search ? '🔍' : '🥢'}</p>
-            <p className={styles.emptyText}>
-              {search ? `"${search}" 검색 결과가 없어요` : '아직 레시피가 없어요'}
-            </p>
-            {!search && <p className={styles.emptyHint}>+ 버튼을 눌러 첫 요리를 기록해보세요!</p>}
-          </div>
-        ) : (
-          <div className={styles.grid}>
-            {recipes.map((recipe, i) => (
-              <RecipeCard key={recipe.id} recipe={recipe} onClick={() => setSelectedIndex(i)} />
-            ))}
-          </div>
-        )}
-      </main>
+      {loading ? (
+        <div className={styles.state}><div className="loading-spinner" /></div>
+      ) : recipes.length === 0 ? (
+        <div className={styles.state}>
+          <p className={styles.emptyIcon}>{search ? '🔍' : '🥢'}</p>
+          <p className={styles.emptyText}>
+            {search ? `"${search}" 검색 결과가 없어요` : '아직 레시피가 없어요'}
+          </p>
+          {!search && <p className={styles.emptyHint}>+ 버튼을 눌러 첫 요리를 기록해보세요!</p>}
+        </div>
+      ) : (
+        <RecipeSlider
+          key={`${category}|${debouncedSearch}`}
+          recipes={recipes}
+          onSelect={setSelectedIndex}
+        />
+      )}
 
       <button
         className={styles.fab}
