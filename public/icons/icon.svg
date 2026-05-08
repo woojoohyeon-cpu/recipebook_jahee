@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#8B5E3C"/>
+
+  <!-- Bowl body -->
+  <path d="M 100 270 Q 98 390 256 400 Q 414 390 412 270 Z" fill="#F5F0E8"/>
+
+  <!-- Bowl rim -->
+  <rect x="95" y="252" width="322" height="36" rx="18" fill="#C4956A"/>
+
+  <!-- Rice mounds -->
+  <ellipse cx="185" cy="255" rx="38" ry="28" fill="white"/>
+  <ellipse cx="256" cy="247" rx="44" ry="32" fill="white"/>
+  <ellipse cx="327" cy="255" rx="38" ry="28" fill="white"/>
+  <ellipse cx="220" cy="260" rx="32" ry="22" fill="white"/>
+  <ellipse cx="292" cy="260" rx="32" ry="22" fill="white"/>
+
+  <!-- Chopsticks -->
+  <line x1="195" y1="140" x2="225" y2="248" stroke="#6B4226" stroke-width="14" stroke-linecap="round"/>
+  <line x1="230" y1="132" x2="255" y2="248" stroke="#6B4226" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Steam -->
+  <path d="M 226 208 Q 218 192 226 178 Q 234 164 226 150" stroke="#C4956A" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 256 202 Q 248 186 256 172 Q 264 158 256 144" stroke="#C4956A" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 286 208 Q 278 192 286 178 Q 294 164 286 150" stroke="#C4956A" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.7"/>
+</svg>
