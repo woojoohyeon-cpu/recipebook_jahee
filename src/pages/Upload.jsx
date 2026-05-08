@@ -156,7 +156,7 @@ function SingleForm({ user, navigate }) {
           <input
             type="text" value={ingredientInput}
             onChange={e => setIngredientInput(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(ingredients, setIngredients, ingredientInput, setIngredientInput) } }}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); addTag(ingredients, setIngredients, ingredientInput, setIngredientInput) } }}
             placeholder="재료 입력 후 Enter 또는 추가" className={styles.tagInput}
           />
           <button type="button" onClick={() => addTag(ingredients, setIngredients, ingredientInput, setIngredientInput)} className={styles.addTagBtn}>추가</button>
@@ -180,7 +180,7 @@ function SingleForm({ user, navigate }) {
             <input
               type="text" value={sideDishInput}
               onChange={e => setSideDishInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(sideDishes, setSideDishes, sideDishInput, setSideDishInput) } }}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); addTag(sideDishes, setSideDishes, sideDishInput, setSideDishInput) } }}
               placeholder="반찬 이름 입력 후 Enter 또는 추가" className={styles.tagInput}
             />
             <button type="button" onClick={() => addTag(sideDishes, setSideDishes, sideDishInput, setSideDishInput)} className={styles.addTagBtn}>추가</button>

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import RecipeCard from '../components/RecipeCard'
-import HansangCard from '../components/HansangCard'
 import CategoryFilter from '../components/CategoryFilter'
 import RecipeModal from '../components/RecipeModal'
 import RankingSection from '../components/RankingSection'
@@ -16,7 +15,7 @@ export default function RecipeList() {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [loading, setLoading] = useState(true)
-  const [selectedRecipe, setSelectedRecipe] = useState(null)
+  const [selectedIndex, setSelectedIndex] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -82,15 +81,9 @@ export default function RecipeList() {
           </div>
         ) : (
           <div className={styles.grid}>
-            {recipes.map(recipe =>
-              recipe.category === '한상차림' ? (
-                <div key={recipe.id} className={styles.fullWidth}>
-                  <HansangCard recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
-                </div>
-              ) : (
-                <RecipeCard key={recipe.id} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
-              )
-            )}
+            {recipes.map((recipe, i) => (
+              <RecipeCard key={recipe.id} recipe={recipe} onClick={() => setSelectedIndex(i)} />
+            ))}
           </div>
         )}
       </main>
@@ -103,11 +96,12 @@ export default function RecipeList() {
         +
       </button>
 
-      {selectedRecipe && (
+      {selectedIndex !== null && (
         <RecipeModal
-          recipe={selectedRecipe}
-          onClose={() => setSelectedRecipe(null)}
-          onDeleted={() => { fetchRecipes(); setSelectedRecipe(null) }}
+          recipes={recipes}
+          initialIndex={selectedIndex}
+          onClose={() => setSelectedIndex(null)}
+          onDeleted={() => { fetchRecipes(); setSelectedIndex(null) }}
         />
       )}
     </div>

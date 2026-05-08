@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import styles from './RecipeModal.module.css'
 
-export default function RecipeModal({ recipe, onClose, onDeleted }) {
+export default function RecipeModal({ recipes, initialIndex, onClose, onDeleted }) {
+  const [idx, setIdx] = useState(initialIndex)
+  const recipe = recipes[idx]
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const touchStartX = useRef(null)
+  const sheetRef = useRef(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -15,6 +19,29 @@ export default function RecipeModal({ recipe, onClose, onDeleted }) {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = prev }
   }, [])
+
+  useEffect(() => {
+    setZoom(1)
+    setRotation(0)
+    setConfirmDelete(false)
+    if (sheetRef.current) sheetRef.current.scrollTop = 0
+  }, [idx])
+
+  const goPrev = () => { if (idx > 0) setIdx(i => i - 1) }
+  const goNext = () => { if (idx < recipes.length - 1) setIdx(i => i + 1) }
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 60) {
+      diff > 0 ? goNext() : goPrev()
+    }
+    touchStartX.current = null
+  }
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) onClose()
@@ -40,11 +67,14 @@ export default function RecipeModal({ recipe, onClose, onDeleted }) {
 
   return (
     <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.sheet}>
+      <div className={styles.sheet} ref={sheetRef}>
         <div className={styles.handle} />
 
         <div className={styles.headerBar}>
           <button onClick={onClose} className={styles.closeBtn}>✕</button>
+          {recipes.length > 1 && (
+            <span className={styles.counter}>{idx + 1} / {recipes.length}</span>
+          )}
           <button
             className={styles.editBtn}
             onClick={() => { onClose(); navigate(`/edit/${recipe.id}`) }}
@@ -53,7 +83,11 @@ export default function RecipeModal({ recipe, onClose, onDeleted }) {
           </button>
         </div>
 
-        <div className={styles.photoWrap}>
+        <div
+          className={styles.photoWrap}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div
             className={styles.photoInner}
             style={{ transform: `scale(${zoom}) rotate(${rotation}deg)` }}
@@ -63,6 +97,13 @@ export default function RecipeModal({ recipe, onClose, onDeleted }) {
               : <div className={styles.noPhoto}>📷</div>
             }
           </div>
+
+          {idx > 0 && (
+            <button className={`${styles.navBtn} ${styles.navPrev}`} onClick={goPrev}>‹</button>
+          )}
+          {idx < recipes.length - 1 && (
+            <button className={`${styles.navBtn} ${styles.navNext}`} onClick={goNext}>›</button>
+          )}
 
           <div className={styles.controls}>
             <button onClick={rotateL} title="왼쪽 회전">↺</button>
@@ -92,7 +133,7 @@ export default function RecipeModal({ recipe, onClose, onDeleted }) {
             </div>
           )}
 
-          {recipe.category === '한상차림' && recipe.side_dishes?.length > 0 && (
+          {recipe.side_dishes?.length > 0 && (
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>🍽 반찬 구성</h3>
               <div className={styles.sideTags}>

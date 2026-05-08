@@ -198,7 +198,7 @@ export default function EditRecipe({ user }) {
           onInputChange={setIngredientInput}
           onAdd={() => addTag(ingredients, setIngredients, ingredientInput, setIngredientInput)}
           onRemove={item => removeTag(ingredients, setIngredients, item)}
-          onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(ingredients, setIngredients, ingredientInput, setIngredientInput) } }}
+          onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); addTag(ingredients, setIngredients, ingredientInput, setIngredientInput) } }}
           placeholder="재료 입력 후 Enter 또는 추가"
         />
 
@@ -211,7 +211,7 @@ export default function EditRecipe({ user }) {
             onInputChange={setSideDishInput}
             onAdd={() => addTag(sideDishes, setSideDishes, sideDishInput, setSideDishInput)}
             onRemove={item => removeTag(sideDishes, setSideDishes, item)}
-            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(sideDishes, setSideDishes, sideDishInput, setSideDishInput) } }}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); addTag(sideDishes, setSideDishes, sideDishInput, setSideDishInput) } }}
             placeholder="반찬 이름 입력 후 Enter 또는 추가"
           />
         )}
