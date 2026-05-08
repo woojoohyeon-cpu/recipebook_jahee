@@ -7,7 +7,7 @@ import RankingSection from '../components/RankingSection'
 import RecipeSlider from '../components/RecipeSlider'
 import styles from './RecipeList.module.css'
 
-const CATEGORIES = ['전체', '국·찌개', '메인반찬', '소반찬', '밥·면', '쌈·샐러드', '한상차림', '기타']
+const CATEGORIES = ['전체', '국·찌개', '메인반찬', '기타반찬', '밥·면', '쌈·샐러드', '한상차림', '기타']
 
 export default function RecipeList() {
   const [recipes, setRecipes] = useState([])

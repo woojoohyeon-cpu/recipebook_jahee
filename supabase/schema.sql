@@ -9,7 +9,7 @@ create table if not exists recipes (
   user_id     uuid        references auth.users(id) on delete cascade not null,
   title       text        not null,
   category    text        not null check (
-    category in ('국·찌개', '메인반찬', '소반찬', '밥·면', '쌈·샐러드', '한상차림', '기타')
+    category in ('국·찌개', '메인반찬', '기타반찬', '밥·면', '쌈·샐러드', '한상차림', '기타')
   ),
   photo_url   text,
   side_dishes text[]      default '{}',

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import styles from './Upload.module.css'
 
-const CATEGORIES = ['국·찌개', '메인반찬', '소반찬', '밥·면', '쌈·샐러드', '한상차림', '기타']
+const CATEGORIES = ['국·찌개', '메인반찬', '기타반찬', '밥·면', '쌈·샐러드', '한상차림', '기타']
 const today = () => new Date().toISOString().split('T')[0]
 
 export default function Upload({ user }) {

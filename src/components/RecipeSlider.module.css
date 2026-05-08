@@ -7,15 +7,14 @@
 
 .stage {
   position: relative;
-  /* 72vw card, 3:4 photo = 96vw, info strip = 72px */
-  height: calc(72vw * 4 / 3 + 72px);
+  /* height set as inline style (cardW * 4/3 + 72px) */
 }
 
 .item {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 72vw;
+  /* width set as inline style */
   background: #fff;
   border: 1px solid #ddd5ca;
   border-radius: 3px;
@@ -23,8 +22,7 @@
   transform-origin: center top;
   transition:
     transform 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.34s ease,
-    filter 0.34s ease;
+    opacity 0.34s ease;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -49,7 +47,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .info {
@@ -162,14 +160,4 @@
   font-variant-numeric: tabular-nums;
   font-weight: 500;
   letter-spacing: 0.03em;
-}
-
-@media (min-width: 480px) {
-  .stage {
-    height: calc(min(72vw, 320px) * 4 / 3 + 72px);
-  }
-
-  .item {
-    max-width: 320px;
-  }
 }

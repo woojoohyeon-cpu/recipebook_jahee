@@ -1,11 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './RecipeSlider.module.css'
+
+const PEEK = 62 // px visible from each edge for ±1 card
 
 export default function RecipeSlider({ recipes, onSelect }) {
   const [current, setCurrent] = useState(0)
   const [touchStartX, setTouchStartX] = useState(null)
+  const [cw, setCw] = useState(0)
+  const outerRef = useRef(null)
+
+  useEffect(() => {
+    const el = outerRef.current
+    if (!el) return
+    const update = () => setCw(el.clientWidth)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   if (recipes.length === 0) return null
+
+  const SCALE1 = 0.83
+  const cardW = cw > 0 ? Math.min(cw * 0.58, 280) : 218
+  // ±1 card center = screen_center + offset, peek = screen_right - (±1_left_edge)
+  // left_edge = center - halfScaled → offset = screen_w/2 - PEEK + halfScaled
+  const offset1 = cw > 0 ? cw / 2 - PEEK + (cardW * SCALE1 / 2) : 208
+  const stageH = cardW * 4 / 3 + 72
 
   const goPrev = () => current > 0 && setCurrent(c => c - 1)
   const goNext = () => current < recipes.length - 1 && setCurrent(c => c + 1)
@@ -20,42 +41,36 @@ export default function RecipeSlider({ recipes, onSelect }) {
 
   const getStyle = (diff) => {
     const d = Math.abs(diff)
-    if (d > 2) return null
-    const SCALES   = [1,    0.83, 0.67]
-    const OPACITY  = [1,    0.74, 0.40]
-    const BLUR     = ['none', 'none', 'blur(2.5px)']
-    const OFFSET   = [0,    65,   125] // vw
+    if (d > 1) return null
     const sign = diff > 0 ? 1 : -1
     const tx = d === 0
       ? 'translateX(-50%)'
-      : `translateX(calc(-50% + ${sign * OFFSET[d]}vw))`
+      : `translateX(calc(-50% + ${sign * offset1}px))`
     return {
-      transform: `${tx} scale(${SCALES[d]})`,
-      opacity: OPACITY[d],
-      filter: BLUR[d],
-      zIndex: 5 - d * 2,
+      transform: `${tx} scale(${d === 0 ? 1 : SCALE1})`,
+      opacity: d === 0 ? 1 : 0.72,
+      zIndex: 3 - d,
     }
   }
 
   return (
     <div
       className={styles.outer}
+      ref={outerRef}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div className={styles.stage}>
+      <div className={styles.stage} style={{ height: stageH }}>
         {recipes.map((recipe, idx) => {
           const diff = idx - current
-          const style = getStyle(diff)
-          if (!style) return null
-          const isActive = diff === 0
-
+          const cardStyle = getStyle(diff)
+          if (!cardStyle) return null
           return (
             <div
               key={recipe.id}
               className={styles.item}
-              style={style}
-              onClick={() => isActive ? onSelect(idx) : setCurrent(idx)}
+              style={{ ...cardStyle, width: `${cardW}px` }}
+              onClick={() => diff === 0 ? onSelect(idx) : setCurrent(idx)}
             >
               <div className={styles.photo}>
                 {recipe.photo_url
@@ -84,7 +99,6 @@ export default function RecipeSlider({ recipes, onSelect }) {
       {recipes.length > 1 && (
         <div className={styles.navRow}>
           <button className={styles.arrow} onClick={goPrev} disabled={current === 0}>‹</button>
-
           <div className={styles.dotWrap}>
             {recipes.length <= 9 ? (
               recipes.map((_, i) => (
@@ -98,7 +112,6 @@ export default function RecipeSlider({ recipes, onSelect }) {
               <span className={styles.counter}>{current + 1} / {recipes.length}</span>
             )}
           </div>
-
           <button className={styles.arrow} onClick={goNext} disabled={current === recipes.length - 1}>›</button>
         </div>
       )}
