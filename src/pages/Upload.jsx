@@ -104,7 +104,7 @@ function SingleForm({ user, navigate }) {
       navigate('/')
     } catch (err) {
       console.error(err)
-      setError('저장 중 오류가 발생했어요.')
+      setError(err.message || '저장 중 오류가 발생했어요.')
     } finally {
       setLoading(false)
     }
@@ -281,7 +281,7 @@ function BulkForm({ user, navigate }) {
       navigate('/')
     } catch (err) {
       console.error(err)
-      setError('저장 중 오류가 발생했어요.')
+      setError(err.message || '저장 중 오류가 발생했어요.')
     } finally {
       setLoading(false)
     }

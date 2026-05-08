@@ -5,11 +5,17 @@
   animation: slideDown 0.25s ease;
 }
 
-.header {
+.toggleBtn {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 0.875rem;
+  cursor: pointer;
+  text-align: left;
 }
 
 .title {
@@ -20,22 +26,18 @@
   margin: 0;
 }
 
-.closeBtn {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--color-bg);
-  border: none;
-  font-size: 0.9375rem;
+.chevron {
+  font-size: 1.25rem;
   color: var(--color-text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  line-height: 1;
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+  display: inline-block;
 }
 
-.closeBtn:hover { background: var(--color-border); }
+.chevronOpen {
+  transform: rotate(270deg);
+}
 
 .msg {
   font-size: 0.875rem;

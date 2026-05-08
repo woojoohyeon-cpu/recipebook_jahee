@@ -17,7 +17,6 @@ export default function RecipeList() {
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [selectedRecipe, setSelectedRecipe] = useState(null)
-  const [showRanking, setShowRanking] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,13 +47,6 @@ export default function RecipeList() {
       <header className={styles.header}>
         <h1 className={styles.title}>자희 쉐프의 레시피 회고록</h1>
         <div className={styles.headerActions}>
-          <button
-            className={`${styles.iconBtn} ${showRanking ? styles.iconBtnActive : ''}`}
-            onClick={() => setShowRanking(r => !r)}
-            title="랭킹 보기"
-          >
-            📊
-          </button>
           <button onClick={handleLogout} className={styles.logoutBtn}>나가기</button>
         </div>
       </header>
@@ -73,7 +65,7 @@ export default function RecipeList() {
         )}
       </div>
 
-      {showRanking && <RankingSection onClose={() => setShowRanking(false)} />}
+      <RankingSection />
 
       <CategoryFilter categories={CATEGORIES} active={category} onChange={setCategory} />
 
